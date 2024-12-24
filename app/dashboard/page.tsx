@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Layout from "../components/layout/Layout";
 import FileUpload from "../components/files/FileUpload";
 import FileList from "../components/files/FileList";
 import { File } from "../types/file";
+import { toast } from "react-hot-toast";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -29,16 +30,18 @@ export default function Dashboard() {
     },
   ];
 
-  const handleFileDelete = async (fileId: string) => {
+  const handleFileDelete = useCallback(async (fileId: string) => {
     try {
       await fetch(`/api/files/${fileId}`, {
         method: "DELETE",
       });
-      // Refresh files list
+      toast.success("File deleted successfully");
+      // Add Redux action to refresh files
     } catch (error) {
+      toast.error("Failed to delete file");
       console.error("Failed to delete file:", error);
     }
-  };
+  }, []);
 
   const handleFileShare = async (fileId: string) => {
     try {
