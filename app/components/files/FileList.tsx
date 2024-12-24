@@ -18,17 +18,13 @@ const FileList: React.FC<FileListProps> = ({ files, onDelete, onShare }) => {
                   <DocumentIcon className="h-6 w-6 text-gray-400" />
                   <div className="ml-3">
                     <p className="text-sm font-medium text-gray-900">
-                      {file.name}
+                      {file.original_filename}
                     </p>
                     <div className="flex text-sm text-gray-500 space-x-4">
                       <span>
                         Uploaded{" "}
-                        {new Date(file.uploadedAt).toLocaleDateString()}
+                        {new Date(file.uploaded_at).toLocaleDateString()}
                       </span>
-                      <span>{file.size}</span>
-                      {file.shared && (
-                        <span className="text-blue-600">Shared</span>
-                      )}
                     </div>
                   </div>
                 </div>

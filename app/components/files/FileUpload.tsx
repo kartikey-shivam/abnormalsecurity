@@ -2,7 +2,8 @@ import React, { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { useDropzone } from "react-dropzone";
 import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
-import { encryptFile } from "../../utils/encryption";
+import { uploadFile } from "@/app/features/files/fileSlice";
+import type { AppDispatch } from "@/app/store/store";
 
 interface UploadProgressProps {
   progress: number;
@@ -14,7 +15,7 @@ const UploadProgress = ({ progress }: UploadProgressProps) => (
       <div className="flex mb-2 items-center justify-between">
         <div>
           <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-600 bg-blue-200">
-            Encrypting & Uploading
+            Uploading
           </span>
         </div>
         <div className="text-right">
@@ -36,35 +37,22 @@ const UploadProgress = ({ progress }: UploadProgressProps) => (
 const FileUpload = () => {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleFileUpload = async (file: File) => {
     try {
       setUploading(true);
       setUploadProgress(0);
 
-      // Encrypt the file before uploading
-      const { encryptedData, iv } = await encryptFile(file);
-
       const formData = new FormData();
-      formData.append("file", encryptedData);
-      formData.append("iv", JSON.stringify(iv));
-      formData.append("filename", file.name);
-      formData.append("contentType", file.type);
+      formData.append("file", file);
 
-      // Simulate upload progress
+      // Show upload progress
       const progressInterval = setInterval(() => {
-        setUploadProgress((prev) => {
-          if (prev >= 90) {
-            clearInterval(progressInterval);
-            return prev;
-          }
-          return prev + 10;
-        });
+        setUploadProgress((prev) => Math.min(prev + 10, 90));
       }, 500);
 
-      // TODO: Replace with actual API call
-      // await dispatch(uploadFile(formData)).unwrap();
+      await dispatch(uploadFile(formData)).unwrap();
 
       clearInterval(progressInterval);
       setUploadProgress(100);

@@ -1,28 +1,62 @@
-const ENCRYPTION_KEY = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
+const getEncryptionKey = (): Uint8Array => {
+  // Generate a fixed 256-bit (32-byte) key
+  const key = new Uint8Array(32);
+  // Fill with a consistent value for testing (in production, use a secure key)
+  for (let i = 0; i < 32; i++) {
+    key[i] = i;
+  }
+  return key;
+};
 
-export const encryptFile = async (file: File) => {
-  const fileBuffer = await file.arrayBuffer();
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-
+export const encryptFile = async (
+  file: File
+): Promise<{ encryptedData: Blob; iv: Uint8Array }> => {
   const key = await crypto.subtle.importKey(
     "raw",
-    new TextEncoder().encode(ENCRYPTION_KEY),
+    getEncryptionKey(),
     { name: "AES-GCM" },
     false,
     ["encrypt"]
   );
 
-  const encryptedContent = await crypto.subtle.encrypt(
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const fileData = await file.arrayBuffer();
+
+  const encryptedData = await crypto.subtle.encrypt(
     {
       name: "AES-GCM",
-      iv: iv,
+      iv,
     },
     key,
-    fileBuffer
+    fileData
   );
 
   return {
-    encryptedData: new Blob([encryptedContent]),
-    iv: Array.from(iv),
+    encryptedData: new Blob([encryptedData]),
+    iv,
   };
+};
+
+export const decryptFile = async (
+  encryptedData: ArrayBuffer,
+  iv: Uint8Array
+): Promise<ArrayBuffer> => {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    getEncryptionKey(),
+    { name: "AES-GCM" },
+    false,
+    ["decrypt"]
+  );
+
+  const decryptedData = await crypto.subtle.decrypt(
+    {
+      name: "AES-GCM",
+      iv,
+    },
+    key,
+    encryptedData
+  );
+
+  return decryptedData;
 };

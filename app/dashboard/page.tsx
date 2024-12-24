@@ -7,43 +7,38 @@ import FileUpload from "../components/files/FileUpload";
 import FileList from "../components/files/FileList";
 import { File } from "../types/file";
 import { toast } from "react-hot-toast";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store/store";
+import { deleteFile } from "../features/files/fileSlice";
+import type { AppDispatch } from "../store/store";
 
 export default function Dashboard() {
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const { files } = useSelector((state: RootState) => state.files);
 
   // Example files data - replace with actual data from your API/Redux store
-  const files: File[] = [
-    {
-      id: "1",
-      name: "document.pdf",
-      uploadedAt: new Date(),
-      size: "2.5MB",
-      type: "application/pdf",
-    },
-    {
-      id: "2",
-      name: "image.jpg",
-      uploadedAt: new Date(),
-      size: "1.2MB",
-      type: "image/jpeg",
-      shared: true,
-    },
-  ];
 
-  const handleFileDelete = useCallback(async (fileId: string) => {
-    try {
-      await fetch(`/api/files/${fileId}`, {
-        method: "DELETE",
-      });
-      toast.success("File deleted successfully");
-      // Add Redux action to refresh files
-    } catch (error) {
-      toast.error("Failed to delete file");
-      console.error("Failed to delete file:", error);
-    }
-  }, []);
+  const handleFileDelete = useCallback(
+    async (fileId: number) => {
+      try {
+        await dispatch(deleteFile(fileId)).unwrap();
+        toast.success("File deleted successfully");
+      } catch (error: any) {
+        if (error.response?.status === 403) {
+          toast.error("You can only delete your own files");
+        } else if (error.response?.status === 404) {
+          toast.error("File not found");
+        } else {
+          toast.error("Failed to delete file");
+        }
+        console.error("Failed to delete file:", error);
+      }
+    },
+    [dispatch]
+  );
 
-  const handleFileShare = async (fileId: string) => {
+  const handleFileShare = async (fileId: number) => {
     try {
       const response = await fetch(`/api/files/${fileId}/share`, {
         method: "POST",

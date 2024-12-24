@@ -7,6 +7,8 @@ import { setUser } from "@/app/features/auth/authSlice";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import { Settings } from "../settings/Settings";
+import { Dashboard } from "../dashboard/Dashboard";
+import { SharedFiles } from "../shared/SharedFiles";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch();
@@ -31,6 +33,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     switch (activeView) {
       case "settings":
         return <Settings />;
+      case "dashboard":
+        return <Dashboard />;
+      case "shared":
+        return <SharedFiles />;
       default:
         return children;
     }
