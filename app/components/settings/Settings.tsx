@@ -2,9 +2,11 @@
 
 import { useSelector } from "react-redux";
 import { MFASettings } from "./MFASettings";
+import { UserRoleManagement } from "./UserRoleManagement";
+import { RootState } from "@/app/store/store";
 
 export const Settings = () => {
-  const user = useSelector((state: any) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth.user);
 
   return (
     <div>
@@ -12,10 +14,12 @@ export const Settings = () => {
         <h1 className="text-2xl font-bold">Settings</h1>
       </div>
 
-      <div className="p-6">
+      <div className="p-6 space-y-6">
         <div className="bg-white rounded-lg shadow">
           <MFASettings is_mfa_enabled={user?.is_mfa_enabled || false} />
         </div>
+
+        {user?.role === "admin" && <UserRoleManagement />}
       </div>
     </div>
   );

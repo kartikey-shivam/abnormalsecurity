@@ -18,8 +18,7 @@ export const UserManagement = ({
   const handleRoleChange = async (userId: string, newRole: UserRole) => {
     setLoading(userId);
     try {
-      await api.post("/auth/change-role", {
-        user_id: userId,
+      await api.patch(`/users/${userId}/update_role/`, {
         role: newRole,
       });
       toast.success("Role updated successfully");
@@ -35,45 +34,61 @@ export const UserManagement = ({
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+        <thead className="bg-gray-100">
           <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
               Email
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
               Current Role
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Actions
+            <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 uppercase tracking-wider">
+              Change Role
             </th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {users.map((user) => (
-            <tr key={user.id}>
-              <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
+            <tr key={user.id} className="hover:bg-gray-50">
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {user.email}
+              </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                <span
+                  className={`px-3 py-1 inline-flex text-sm font-medium rounded-full
+                    ${
+                      user.role === "admin"
+                        ? "bg-purple-100 text-purple-800"
+                        : ""
+                    }
+                    ${
+                      user.role === "regular" ? "bg-blue-100 text-blue-800" : ""
+                    }
+                    ${user.role === "guest" ? "bg-gray-100 text-gray-800" : ""}
+                  `}
+                >
                   {user.role}
                 </span>
               </td>
-              {/* <td className="px-6 py-4 whitespace-nowrap">
+              <td className="px-6 py-4 whitespace-nowrap">
                 {loading === user.id ? (
-                  <LoadingSpinner />
+                  <div className="w-full flex justify-center">
+                    <LoadingSpinner />
+                  </div>
                 ) : (
                   <select
                     value={user.role}
                     onChange={(e) =>
                       handleRoleChange(user.id, e.target.value as UserRole)
                     }
-                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                    className="block w-full px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="admin">Admin</option>
                     <option value="regular">Regular</option>
                     <option value="guest">Guest</option>
                   </select>
                 )}
-              </td> */}
+              </td>
             </tr>
           ))}
         </tbody>

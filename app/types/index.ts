@@ -1,12 +1,11 @@
 export type UserRole = "admin" | "regular" | "guest";
 
 export interface User {
-  id: number;
-  username: string;
+  id: string;
   email: string;
-  phone_number: string;
   role: UserRole;
-  mfaEnabled: boolean;
+  is_mfa_enabled: boolean;
+  // ... other user properties
 }
 
 export interface ApiResponse<T> {
