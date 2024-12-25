@@ -34,7 +34,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       case "settings":
         return <Settings />;
       case "dashboard":
-        return <Dashboard />;
+        return <Dashboard view={activeView} />;
       case "shared":
         return <SharedFiles />;
       default:
