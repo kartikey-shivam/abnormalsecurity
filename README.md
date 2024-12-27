@@ -49,7 +49,7 @@ A modern, secure file sharing platform built with Next.js, TypeScript, and Redux
 - Expiration configuration
 
 ### Admin Panel
-![Admin Panel](/public/adminSettings.png)
+![Admin Panel](/public/adminsettings.png)
 - All shares overview
 - User management
 - System settings
