@@ -55,7 +55,7 @@ A modern, secure file sharing platform built with Next.js, TypeScript, and Redux
 - System settings
 
 ### MFA Setup
-![Admin Panel](/public/MFA-setup.png.png)
+![MFA - setup](/public/MFA-setup.png)
 - 6 digit verification code
 - two factor authentication by email
 
