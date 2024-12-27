@@ -1,5 +1,71 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Secure File Sharing Platform (Frontend)
 
+A modern, secure file sharing platform built with Next.js, TypeScript, and Redux Toolkit. This application allows users to securely upload, share, and manage files with advanced features like Two-Factor Authentication and role-based access control.
+
+## Features
+
+### Authentication & Security
+- 🔐 User Registration and Login
+- 🔒 Two-Factor Authentication (Email-based)
+- 🛡️ Role-based Access Control (Admin/User)
+- 🚪 Automatic Session Management
+
+### File Management
+- 📤 File Upload with Progress Tracking
+- 📂 File Organization and Listing
+- 🗑️ File Deletion
+- 📥 Secure File Downloads
+
+### File Sharing
+- 🔗 Public and Private File Sharing
+- ⏱️ Time-limited Share Links
+- 📋 Permission-based Access (View/Download)
+- 👥 Share with Multiple Users
+
+### Admin Features
+- 👀 View All Shared Files
+- 🚫 Revoke Any Share Access
+- 👤 User Role Management
+- 📊 System Overview
+
+## Screenshots
+
+### Dashboard
+![Dashboard](path_to_dashboard_screenshot.png)
+- File listing with actions
+- Upload functionality
+- Quick access to shared files
+
+### File Sharing
+![File Sharing](path_to_sharing_screenshot.png)
+- Share dialog with multiple options
+- Permission settings
+- Expiration configuration
+
+### Admin Panel
+![Admin Panel](path_to_admin_screenshot.png)
+- All shares overview
+- User management
+- System settings
+
+### Authentication
+![Register Page](/public/register.png)
+- Clean, modern authentication UI
+- Email-based registration
+- Form validation
+- Error handling
+
+## Getting Started
+
+### Prerequisites
+- Node.js 16+
+- npm or yarn
+- Backend API running ([Backend Repository](https://github.com/kartikey-shivam/abnormalsecurity-backend))
+
+### Installation
+
+1. Clone the repository:
 ## Getting Started
 
 First, run the development server:
@@ -35,3 +101,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 # abnormalsecurity-frontend
+
+## Backend Repository
+
+The backend for this project is available at: [Secure File Sharing Backend](https://github.com/kartikey-shivam/abnormalsecurity-backend)
