@@ -37,7 +37,7 @@ A modern, secure file sharing platform built with Next.js, TypeScript, and Redux
 - Upload functionality
 - Quick access to shared files
 
-![ Guest Dashboard](/public/guestDashboard.png.png)
+![ Guest Dashboard](/public/guestDashboard.png)
 - File listing with actions
 - Upload functionality
 - Quick access to shared files
