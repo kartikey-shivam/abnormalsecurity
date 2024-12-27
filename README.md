@@ -32,25 +32,32 @@ A modern, secure file sharing platform built with Next.js, TypeScript, and Redux
 ## Screenshots
 
 ### Dashboard
-![Dashboard](path_to_dashboard_screenshot.png)
+![Dashboard](/public/adminDashboard.png)
 - File listing with actions
 - Upload functionality
 - Quick access to shared files
 
 ### File Sharing
-![File Sharing](path_to_sharing_screenshot.png)
+![File Sharing](/public/sharedFileTab.png)
 - Share dialog with multiple options
 - Permission settings
 - Expiration configuration
 
 ### Admin Panel
-![Admin Panel](path_to_admin_screenshot.png)
+![Admin Panel](/public/adminSettings.png)
 - All shares overview
 - User management
 - System settings
 
 ### Authentication
 ![Register Page](/public/register.png)
+- Clean, modern authentication UI
+- Email-based registration
+- Form validation
+- Error handling
+
+### Authentication
+![Login Page](/public/login.png)
 - Clean, modern authentication UI
 - Email-based registration
 - Form validation
