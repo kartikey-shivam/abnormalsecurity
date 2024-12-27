@@ -37,7 +37,7 @@ A modern, secure file sharing platform built with Next.js, TypeScript, and Redux
 - Upload functionality
 - Quick access to shared files
 
-![ Guest Dashboard](/public/guestDashboard.png)
+![ Guest Dashboard](/public/guestDashboard.png.png)
 - File listing with actions
 - Upload functionality
 - Quick access to shared files
@@ -53,6 +53,11 @@ A modern, secure file sharing platform built with Next.js, TypeScript, and Redux
 - All shares overview
 - User management
 - System settings
+
+### MFA Setup
+![Admin Panel](/public/MFA-setup.png.png)
+- 6 digit verification code
+- two factor authentication by email
 
 ### Authentication
 ![Register Page](/public/register.png)
