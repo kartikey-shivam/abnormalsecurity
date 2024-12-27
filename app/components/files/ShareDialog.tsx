@@ -74,13 +74,13 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <Dialog.Title
                   as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900"
+                  className="text-lg font-medium leading-6 text-black font-semibold"
                 >
                   Share File
                 </Dialog.Title>
                 <button
                   onClick={onClose}
-                  className="absolute top-4 right-4 text-gray-400 hover:text-gray-500"
+                  className="absolute top-4 right-4 text-black hover:text-black"
                 >
                   <XMarkIcon className="h-6 w-6" />
                 </button>
@@ -88,7 +88,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
                 <div className="mt-4 space-y-4">
                   {/* Share Type Selection */}
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-black">
                       Share Type
                     </label>
                     <div className="space-x-4">
@@ -102,7 +102,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
                           }
                           className="form-radio"
                         />
-                        <span className="ml-2">Public</span>
+                        <span className="ml-2 text-black">Public</span>
                       </label>
                       <label className="inline-flex items-center">
                         <input
@@ -114,14 +114,14 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
                           }
                           className="form-radio"
                         />
-                        <span className="ml-2">Private</span>
+                        <span className="ml-2 text-black ">Private</span>
                       </label>
                     </div>
                   </div>
 
                   {/* Permission Selection */}
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-black">
                       Permission
                     </label>
                     <div className="space-x-4">
@@ -135,7 +135,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
                           }
                           className="form-radio"
                         />
-                        <span className="ml-2">View Only</span>
+                        <span className="ml-2 text-black">View Only</span>
                       </label>
                       <label className="inline-flex items-center">
                         <input
@@ -147,7 +147,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
                           }
                           className="form-radio"
                         />
-                        <span className="ml-2">Download</span>
+                        <span className="ml-2 text-black">Download</span>
                       </label>
                     </div>
                   </div>
@@ -155,7 +155,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
                   {/* Email Input for Private Sharing */}
                   {shareType === "private" && (
                     <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className="block text-sm font-medium text-black">
                         Share with Users
                       </label>
                       <div className="flex space-x-2">
@@ -163,7 +163,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
                           type="email"
                           value={emailInput}
                           onChange={(e) => setEmailInput(e.target.value)}
-                          className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                          className="flex-1 rounded-md text-black border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                           placeholder="user@example.com"
                         />
                         <button
@@ -181,7 +181,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
                             key={email}
                             className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-md"
                           >
-                            <span className="text-sm">{email}</span>
+                            <span className="text-sm text-black">{email}</span>
                             <button
                               onClick={() => handleRemoveEmail(email)}
                               className="text-red-500 hover:text-red-700"
@@ -196,7 +196,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
 
                   {/* Expiration Days */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-sm font-medium text-black">
                       Expire after (days)
                     </label>
                     <input
@@ -205,7 +205,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
                       onChange={(e) => setExpireDays(Number(e.target.value))}
                       min="1"
                       max="30"
-                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                      className="mt-1 text-black block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                 </div>

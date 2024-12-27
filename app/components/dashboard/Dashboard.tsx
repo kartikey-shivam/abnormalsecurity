@@ -36,15 +36,9 @@ export const Dashboard = ({ view }: DashboardProps) => {
               </div>
             )}
             <div className="bg-white shadow sm:rounded-lg">
-              <div className="px-4 py-5 sm:p-6">
+              <div className="px-4 py-5 sm:p-6 overflow-y-auto">
                 <FileList
                   files={files}
-                  onDelete={(id) => {
-                    /* handle delete */
-                  }}
-                  onShare={(id) => {
-                    /* handle share */
-                  }}
                 />
                 {files.length === 0 && (
                   <div className="text-center mt-4">

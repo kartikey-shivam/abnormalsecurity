@@ -2,13 +2,10 @@ export interface File {
   id: number;
   original_filename: string;
   uploaded_at: string;
-  uploaded_by: number;
 }
 
 export interface FileListProps {
   files: File[];
-  onDelete: (fileId: number) => void;
-  onShare: (fileId: number) => void;
 }
 
 export interface SharedWithMeFile {
@@ -30,4 +27,16 @@ export interface MySharedFile {
   is_public: boolean;
   is_expired: boolean;
   shared_with?: string;
+}
+
+export interface AdminShare {
+  id: number;
+  file_name: string;
+  shared_by: string;
+  shared_with: string[];
+  created_at: string;
+  expires_at: string;
+  is_public: boolean;
+  permission: 'view' | 'download';
+  file_id: number;
 }

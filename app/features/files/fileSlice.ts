@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "@/app/utils/api";
 import { File } from "@/app/types/file";
 import { SharedWithMeFile, MySharedFile } from "@/app/types/file";
+import { toast } from "react-hot-toast";
 
 interface FileState {
   files: File[];
@@ -32,16 +33,19 @@ export const uploadFile = createAsyncThunk(
         "Content-Type": "multipart/form-data",
       },
     });
-    return response.data;
+    return {
+      id: response.data.id,
+      file: response.data.file,
+      original_filename: response.data.original_filename,
+      uploaded_at: response.data.uploaded_at,
+      uploaded_by: response.data.uploaded_by
+    };
   }
 );
 
-export const shareFile = createAsyncThunk(
-  "files/shareFile",
-  async ({
-    fileId,
-    shareData,
-  }: {
+export const shareFile = createAsyncThunk<
+  any,
+  {
     fileId: number;
     shareData: {
       share_type: "public" | "private";
@@ -49,22 +53,28 @@ export const shareFile = createAsyncThunk(
       expires_in_days: number;
       users?: string[];
     };
-  }) => {
-    const response = await api.post(`/files/${fileId}/share/`, shareData);
-    return response.data;
   }
-);
+>("files/shareFile", async ({ fileId, shareData }) => {
+  const response = await api.post(`/files/${fileId}/share/`, shareData);
+  return response.data;
+});
 
 export const deleteFile = createAsyncThunk(
   "files/deleteFile",
   async (fileId: number, { rejectWithValue }) => {
     try {
-      console.log(fileId, "56");
-      const response = await api.delete(`/files/${fileId}`);
-      console.log(response, "58");
+      console.log("Making delete request for fileId:", fileId);
+      const response = await api.delete(`/files/${fileId}/`);
+      console.log("Delete response:", response);
+      
+      // Return fileId even if response is empty
       return fileId;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data || "Failed to delete file");
+      console.error("Delete API error:", error);
+      return rejectWithValue({
+        status: error.response?.status,
+        message: error.response?.data?.message || "Failed to delete file"
+      });
     }
   }
 );
@@ -106,8 +116,18 @@ const fileSlice = createSlice({
       .addCase(uploadFile.fulfilled, (state, action) => {
         state.files.push(action.payload);
       })
+      .addCase(deleteFile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(deleteFile.fulfilled, (state, action) => {
+        state.loading = false;
         state.files = state.files.filter((file) => file.id !== action.payload);
+        state.error = null;
+      })
+      .addCase(deleteFile.rejected, (state, action: any) => {
+        state.loading = false;
+        state.error = action.payload?.message || "Failed to delete file";
       })
       .addCase(fetchSharedWithMe.pending, (state) => {
         state.loading = true;
@@ -122,6 +142,12 @@ const fileSlice = createSlice({
       .addCase(fetchMyShares.fulfilled, (state, action) => {
         state.loading = false;
         state.myShares = action.payload;
+      })
+      .addCase(shareFile.fulfilled, (state, action) => {
+        toast.success("File shared successfully");
+      })
+      .addCase(shareFile.rejected, (state, action: any) => {
+        toast.error(action.error.message || "Failed to share file");
       });
   },
 });

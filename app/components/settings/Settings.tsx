@@ -11,7 +11,7 @@ export const Settings = () => {
   return (
     <div>
       <div className="flex justify-between items-center p-6 bg-white border-b">
-        <h1 className="text-2xl font-bold">Settings</h1>
+        <h1 className="text-2xl font-bold  text-black">Settings</h1>
       </div>
 
       <div className="p-6 space-y-6">

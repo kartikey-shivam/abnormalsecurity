@@ -55,7 +55,7 @@ export const MFAVerification = ({
       });
 
       // Wait briefly for cookie to be set
-      await new Promise((resolve) => setTimeout(resolve, 10000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const accessToken = Cookies.get("access_token");
       console.log("Cookies available:", document.cookie);
@@ -108,7 +108,7 @@ export const MFAVerification = ({
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-md">
         <div>
-          <h2 className="text-2xl font-bold text-center mb-2">
+          <h2 className="text-2xl font-bold text-center mb-2 text-black">
             Two-Factor Authentication
           </h2>
           <p className="text-gray-600 text-center">
@@ -126,7 +126,7 @@ export const MFAVerification = ({
                 value={code}
                 onChange={handleCodeChange}
                 placeholder="000000"
-                className="block w-48 text-center text-3xl tracking-widest py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="block text-black w-48 text-center text-3xl tracking-widest py-2 px-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
                 pattern="[0-9]{6}"
                 maxLength={6}

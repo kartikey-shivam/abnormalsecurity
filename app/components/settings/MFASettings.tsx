@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Switch } from "@headlessui/react";
 import { toast } from "react-hot-toast";
 import api from "@/app/utils/api";
@@ -17,18 +17,31 @@ export const MFASettings = ({
 }: MFASettingsProps) => {
   const [loading, setLoading] = useState(false);
   const [isMfaEnabled, setIsMfaEnabled] = useState(initialMfaState);
-  const [qrCode, setQrCode] = useState<string | null>(null);
-  const [verificationCode, setVerificationCode] = useState("");
   const [showVerification, setShowVerification] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.auth.user);
 
+  // Check MFA status on component mount
+  useEffect(() => {
+    checkMFAStatus();
+  }, []);
+
+  const checkMFAStatus = async () => {
+    try {
+      const response = await api.get("/mfa/mfa_status/");
+      setIsMfaEnabled(response.data.mfa_enabled);
+      dispatch(setUser({ ...user, is_mfa_enabled: response.data.mfa_enabled }));
+    } catch (error) {
+      console.error("Failed to check MFA status:", error);
+    }
+  };
+
   const handleMFAToggle = async () => {
     if (isMfaEnabled) {
-      // Handle disable
       await handleDisableMFA();
     } else {
-      // Handle enable
       await handleEnableMFA();
     }
   };
@@ -36,10 +49,10 @@ export const MFASettings = ({
   const handleEnableMFA = async () => {
     setLoading(true);
     try {
-      // First, initiate MFA setup
-      const setupResponse = await api.post("/auth/setup-mfa/");
-      setQrCode(setupResponse.data.setup_token);
+      const response = await api.post("/mfa/setup_mfa/");
+      setUserEmail(response.data.email);
       setShowVerification(true);
+      toast.success("Verification code sent to your email");
     } catch (error) {
       toast.error("Failed to initiate MFA setup");
       console.error("MFA setup error:", error);
@@ -56,22 +69,13 @@ export const MFASettings = ({
 
     setLoading(true);
     try {
-      // First verify the setup
-      await api.post("/auth/verify-mfa/", {
-        mfa_code: verificationCode,
-      });
-
-      // Then enable MFA
-      await api.post("/auth/enable-mfa/", {
-        enable: true,
+      await api.post("/mfa/verify_mfa/", {
+        code: verificationCode
       });
 
       setIsMfaEnabled(true);
       setShowVerification(false);
-      setQrCode(null);
       toast.success("MFA enabled successfully");
-
-      // Update user info in Redux
       dispatch(setUser({ ...user, is_mfa_enabled: true }));
     } catch (error) {
       toast.error("Failed to verify MFA code");
@@ -85,13 +89,9 @@ export const MFASettings = ({
   const handleDisableMFA = async () => {
     setLoading(true);
     try {
-      await api.post("/auth/enable-mfa/", {
-        enable: false,
-      });
+      await api.post("/mfa/disable_mfa/");
       setIsMfaEnabled(false);
       toast.success("MFA disabled successfully");
-
-      // Update user info in Redux
       dispatch(setUser({ ...user, is_mfa_enabled: false }));
     } catch (error) {
       toast.error("Failed to disable MFA");
@@ -105,7 +105,7 @@ export const MFASettings = ({
     <div className="bg-white shadow rounded-lg p-6">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-semibold">Two-Factor Authentication</h2>
+          <h2 className="text-xl font-semibold text-black">Two-Factor Authentication</h2>
           <p className="text-gray-600 text-sm mt-1">
             Add an extra layer of security to your account
           </p>
@@ -120,11 +120,6 @@ export const MFASettings = ({
             loading ? "opacity-50 cursor-not-allowed" : ""
           }`}
         >
-          {loading && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <LoadingSpinner className="h-4 w-4" />
-            </div>
-          )}
           <span
             className={`${
               isMfaEnabled ? "translate-x-6" : "translate-x-1"
@@ -133,25 +128,18 @@ export const MFASettings = ({
         </Switch>
       </div>
 
-      {showVerification && qrCode && (
+      {showVerification && (
         <div className="mt-6 space-y-4">
           <p className="text-gray-600">
-            Scan this QR code with your authenticator app:
+            A verification code has been sent to {userEmail}
           </p>
-          <div className="flex justify-center">
-            <img src={qrCode} alt="QR Code" className="w-48 h-48" />
-          </div>
           <div>
             <input
               type="text"
               value={verificationCode}
-              onChange={(e) =>
-                setVerificationCode(
-                  e.target.value.replace(/\D/g, "").slice(0, 6)
-                )
-              }
+              onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
               placeholder="Enter 6-digit code"
-              className="mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="mt-2 text-black block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               maxLength={6}
             />
             <div className="mt-4 flex space-x-4">
@@ -165,7 +153,6 @@ export const MFASettings = ({
               <button
                 onClick={() => {
                   setShowVerification(false);
-                  setQrCode(null);
                   setVerificationCode("");
                 }}
                 className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"

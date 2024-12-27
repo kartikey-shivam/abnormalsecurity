@@ -43,11 +43,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="h-screen bg-gray-100">
       <Navbar />
-      <div className="flex">
+      <div className="flex h-[92%]">
         <Sidebar onNavigate={setActiveView} activeView={activeView} />
-        <main className="flex-1 bg-gray-50">{renderContent()}</main>
+        <main className="flex-1 bg-gray-50 overflow-y-auto">{renderContent()}</main>
       </div>
     </div>
   );

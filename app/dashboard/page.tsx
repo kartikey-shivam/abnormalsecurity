@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Layout from "../components/layout/Layout";
 import FileUpload from "../components/files/FileUpload";
@@ -9,7 +9,7 @@ import { File } from "../types/file";
 import { toast } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
-import { deleteFile } from "../features/files/fileSlice";
+import { fetchFiles } from "../features/files/fileSlice";
 import type { AppDispatch } from "../store/store";
 
 export default function Dashboard() {
@@ -17,38 +17,18 @@ export default function Dashboard() {
   const dispatch = useDispatch<AppDispatch>();
   const { files } = useSelector((state: RootState) => state.files);
 
-  // Example files data - replace with actual data from your API/Redux store
-
-  const handleFileDelete = useCallback(
-    async (fileId: number) => {
-      try {
-        await dispatch(deleteFile(fileId)).unwrap();
-        toast.success("File deleted successfully");
-      } catch (error: any) {
-        if (error.response?.status === 403) {
-          toast.error("You can only delete your own files");
-        } else if (error.response?.status === 404) {
-          toast.error("File not found");
-        } else {
-          toast.error("Failed to delete file");
-        }
-        console.error("Failed to delete file:", error);
-      }
-    },
-    [dispatch]
-  );
+  // Add debug log to check files
+  useEffect(() => {
+    console.log("Current files:", files);
+  }, [files]);
 
   const handleFileShare = async (fileId: number) => {
-    try {
-      const response = await fetch(`/api/files/${fileId}/share`, {
-        method: "POST",
-      });
-      const { shareUrl } = await response.json();
-      // Handle share URL (e.g., copy to clipboard)
-    } catch (error) {
-      console.error("Failed to share file:", error);
-    }
+    router.push(`/share/${fileId}`);
   };
+
+  useEffect(() => {
+    dispatch(fetchFiles());
+  }, [dispatch]);
 
   return (
     <Layout>
@@ -79,11 +59,7 @@ export default function Dashboard() {
         </div>
 
         <div className="mt-8">
-          <FileList
-            files={files}
-            onDelete={handleFileDelete}
-            onShare={handleFileShare}
-          />
+          <FileList files={files} />
         </div>
 
         {files.length === 0 && (

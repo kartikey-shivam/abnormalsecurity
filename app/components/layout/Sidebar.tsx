@@ -34,10 +34,7 @@ const Sidebar = ({ onNavigate, activeView }: SidebarProps) => {
         ]
       : baseNavigation;
 
-  // Add Admin section for admin users
-  if (user?.role === "admin") {
-    navigation.push({ name: "Admin", view: "admin", icon: UserGroupIcon });
-  }
+ 
 
   return (
     <div className="flex flex-col w-64 bg-white border-r">
